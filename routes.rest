@@ -1,0 +1,17 @@
+### Home
+GET http://localhost:3001
+
+### Get all students
+GET http://localhost:3001/students
+
+### Get single student by id
+GET http://localhost:3001/students/6a5ac0aa66270db51c2105c0
+
+### Home Render
+GET https://project2-ncaa.onrender.com
+
+### Get all contacts Render
+GET https://project2-ncaa.onrender.com/students
+
+### Get single contact Render
+GET https://project2-ncaa.onrender.com/students/6a5ac0aa66270db51c2105c0
