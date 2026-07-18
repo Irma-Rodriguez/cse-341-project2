@@ -5,10 +5,11 @@
     "description": "Students Api",
     "version": "1.0.0"
   },
-  "host": "project2-ncaa.onrender.com",
+  "host": "localhost:3001",
   "basePath": "/",
   "schemes": [
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
     "/": {
@@ -124,7 +125,7 @@
       },
       "put": {
         "tags": [
-          "Contacts"
+          "Students"
         ],
         "description": "",
         "parameters": [
@@ -179,7 +180,7 @@
       },
       "delete": {
         "tags": [
-          "Contacts"
+          "Students"
         ],
         "description": "",
         "parameters": [

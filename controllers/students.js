@@ -41,7 +41,7 @@ const createStudent = async (req, res) => {
 };
 
 const updateStudent = async (req, res) => {
-    //#swagger.tags=['Contacts']
+    //#swagger.tags=['Students']
     const studentId = new ObjectId(req.params.id);
     const student = {
         firstName: req.body.firstName,
@@ -62,7 +62,7 @@ const updateStudent = async (req, res) => {
 };
 
 const deleteStudent = async (req, res) => {
-    //#swagger.tags=['Contacts']
+    //#swagger.tags=['Students']
     const studentId = new ObjectId(req.params.id);
     const response = await mongodb.getDatabase().db().collection('students').deleteOne({ _id: studentId });
     if (response.deletedCount > 0) {
