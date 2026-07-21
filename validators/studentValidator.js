@@ -28,7 +28,6 @@ const studentValidationRules = () => {
             .withMessage('Phone is required'),
 
         body('grade')
-            .trim()
             .notEmpty()
             .withMessage('Grade is required'),
 
