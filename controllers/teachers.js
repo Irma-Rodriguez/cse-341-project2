@@ -3,26 +3,38 @@ const ObjectId = require('mongodb').ObjectId;
 
 const getAll = async (req, res) => { 
     //#swagger.tags=['Teachers']
+    try {
     const result = await mongodb.getDatabase().db().collection('teachers').find();
-    result.toArray().then((teachers) => {
+    const teachers = await result.toArray();
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json(teachers)
-    });
+    } catch (err) {
+
+        res.status(500).json({
+            message: err.message
+        });
+    }
 };
 
 const getSingle = async (req, res) => {
     //#swagger.tags=['Teachers']
-    const studentId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db().collection('students').find({ _id: studentId });
-    result.toArray().then((teachers) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(teachers[0])
-    });
+    try {
+    const teacherId = new ObjectId(req.params.id);
+    const result = await mongodb.getDatabase().db().collection('teachers').find({ _id: teacherId });
+    const teachers = await result.toArray();
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(teachers[0])
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
+    }
 };
 
 const createTeacher = async (req, res) => {
     //#swagger.tags=['Teachers']
-    const teachers = {
+    try {
+    const teacher = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
@@ -32,14 +44,22 @@ const createTeacher = async (req, res) => {
     };
     const response = await mongodb.getDatabase().db().collection('teachers').insertOne(teacher);
     if (response.acknowledged) {
-        res.status(204).send();
+        res.status(201).json({
+            message: 'Teacher created successfully'
+        });
     } else {
-        res.status(500).json(response.error || 'Some error occurred while creating the contact.');
+        res.status(500).json(response.error || 'Some error occurred while creating the teacher.');
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
     }
 };
 
 const updateTeacher = async (req, res) => {
     //#swagger.tags=['Teachers']
+    try {
     const teacherId = new ObjectId(req.params.id);
     const teacher = {
         firstName: req.body.firstName,
@@ -53,18 +73,29 @@ const updateTeacher = async (req, res) => {
     if (response.modifiedCount > 0) {
         res.status(204).send();
     } else {
-        res.status(500).json(response.error || 'Some error occurred while updating the contact.');
+        res.status(500).json(response.error || 'Some error occurred while updating the teacher.');
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
     }
 };
 
 const deleteTeacher = async (req, res) => {
     //#swagger.tags=['Teachers']
-    const studentId = new ObjectId(req.params.id);
-    const response = await mongodb.getDatabase().db().collection('students').deleteOne({ _id: studentId });
+    try {
+    const teacherId = new ObjectId(req.params.id);
+    const response = await mongodb.getDatabase().db().collection('teachers').deleteOne({ _id: teacherId });
     if (response.deletedCount > 0) {
         res.status(200).send();
     } else {
-        res.status(500).json(response.error || 'Some error occurred while delating the contact.');
+        res.status(500).json(response.error || 'Some error occurred while deleting the teacher.');
+    }
+    } catch (err) {
+        res.status(500).json({
+            message: err.message
+        });
     }
 };
 
