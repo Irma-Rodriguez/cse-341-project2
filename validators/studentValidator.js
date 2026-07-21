@@ -32,7 +32,7 @@ const studentValidationRules = () => {
             .withMessage('Grade is required'),
 
         body('gpa')
-            .isFloat({ min: 0, max: 4 })
+            .isFloat({ min: 0, max: 10 })
             .withMessage('GPA must be between 0 and 4'),
 
         body('active')
