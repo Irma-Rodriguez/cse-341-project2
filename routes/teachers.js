@@ -6,15 +6,17 @@ const teachersController = require('../controllers/teachers');
 const validate = require('../middleware/validate');
 const teacherValidationRules = require('../validators/teacherValidator');
 
+const { isAuthenticated } = require("../middleware/authenticate");
+
 router.get('/', teachersController.getAll);
 
 router.get('/:id', teachersController.getSingle);
 
-router.post('/', teacherValidationRules(), validate, teachersController.createTeacher);
+router.post('/', isAuthenticated, teacherValidationRules(), validate, teachersController.createTeacher);
 
-router.put('/:id', teacherValidationRules(), validate, teachersController.updateTeacher);
+router.put('/:id', isAuthenticated, teacherValidationRules(), validate, teachersController.updateTeacher);
 
-router.delete('/:id', teachersController.deleteTeacher);
+router.delete('/:id', isAuthenticated, teachersController.deleteTeacher);
 
 
 module.exports = router;
