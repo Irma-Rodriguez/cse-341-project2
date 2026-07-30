@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const dns = require("node:dns/promises");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
@@ -48,28 +50,53 @@ passport.use(new GitHubStrategy({
     callbackURL: process.env.CALLBACK_URL
 },
     function (accessToken, refreshToken, profile, done) {
+        return done(null, profile);
+    }));
+
+passport.use(new GitHubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: process.env.CALLBACK_URL
+},
+    function (accessToken, refreshToken, profile, done) {
         //User.findOrCreate({ githubId: profile.id }, function (err, user){
         return done(null, profile);
         //});
     }
 ));
 
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
+//passport.serializeUser((user, done) => {
+    //done(null, user);
+//});
+//passport.deserializeUser((user, done) => {
+//    done(null, user);
+//});
 
-app.get('/', (req, res) => { res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out") });
+//app.get('/', (req, res) => { res.send(req.session.user !== undefined ? `Logged in as ${req.session.user.displayName}` : "Logged Out") });
 
-app.get('/github/callback', passport.authenticate('github', {
-    failureRedirect: '/api-docs'
-}),
+//app.get('/github/callback', passport.authenticate('github', {
+//    failureRedirect: '/api-docs'
+//}),
+//    (req, res) => {
+//        req.session.user = req.user;
+//        res.redirect('/');
+//    });
+
+app.get(
+    "/github/callback",
+    passport.authenticate("github", {
+        failureRedirect: "/api-docs",
+    }),
     (req, res) => {
+        console.log("Usuario recibido:", req.user);
+
         req.session.user = req.user;
-        res.redirect('/');
-    });
+
+        console.log("Sesión:", req.session);
+
+        res.redirect("/");
+    }
+);
 
 mongodb.initDb((err) => {
     if (err) {
@@ -79,3 +106,5 @@ mongodb.initDb((err) => {
         app.listen(port, () => { console.log(`Database is listening and node running on port ${port}`) });
     }
 });
+
+
